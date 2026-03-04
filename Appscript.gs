@@ -1,5 +1,9 @@
 const AE_SPREADSHEET_ID = '1NV8Qa4bJdVk1GhjXgyMGXFAd55CM94tel8LpqcHPPyI'
 const AE_SHEET_NAME = 'Respuestas'
+
+// clave ofuscada para origen (igual que en convenios)
+const ORIGEN_PARAM = 'qXZ9p0'
+
 function doPost(e) {
   try {
     const {
@@ -12,6 +16,9 @@ function doPost(e) {
       pregunta = '',
       como = '',
     } = e.parameter || {}
+
+    // leer parámetro ofuscado si existe
+    const origen = (e.parameter && e.parameter[ORIGEN_PARAM]) || ''
 
     const ss = SpreadsheetApp.openById(AE_SPREADSHEET_ID)
     const sheet =
@@ -33,6 +40,7 @@ function doPost(e) {
       visa,
       pregunta,
       como,
+      origen, 
     ]
 
     sheet.appendRow(row)
