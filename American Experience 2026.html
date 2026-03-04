@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro - American Experience 2026</title>
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- intl-tel-input -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/19.2.16/css/intlTelInput.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/19.2.16/js/intlTelInput.min.js"></script>
+
+    <!-- FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --bgu-dark-blue: #030d30;
+        --bgu-primary-blue: #143293;
+        --light-gray: #f4f6f9;
+        --border-color: #d1d5db;
+        --text-dark: #1f2937;
+        --text-muted: #6b7280;
+        --white: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: 'Roboto', sans-serif;
+        color: var(--text-dark);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Layout Principal dividido */
+      .main-container {
+        display: flex;
+        width: 100%;
+        min-height: 100vh;
+        background-color: var(--white);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+      }
+
+      /* Panel Izquierdo (Imagen) */
+      .image-panel {
+        width: 40%;
+        background-image:
+          linear-gradient(rgba(3, 13, 48, 0.85), rgba(20, 50, 147, 0.8)),
+          url('https://images.unsplash.com/photo-1628353900470-0bd683a6946a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=90');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 4rem;
+        color: var(--white);
+        position: relative;
+        /* contexto visual adicional */
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .image-panel::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 6px;
+      }
+
+      .brand-logo {
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+      }
+      .brand-logo img {
+        max-width: 180px;
+        height: auto;
+        display: block;
+      }
+
+      .image-panel h1 {
+        font-family: 'Source Serif Pro', serif;
+        font-size: 3.5rem;
+        font-weight: 700;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+      }
+
+      .image-panel p {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        opacity: 0.9;
+        font-weight: 300;
+        max-width: 90%;
+      }
+
+      /* Panel Derecho (Formulario) */
+      .form-panel {
+        width: 60%;
+        padding: 4rem 2rem;
+        overflow-y: auto;
+        display: flex;
+        justify-content: center;
+        background-color: var(--white);
+        height: 100vh; /* Scroll independiente */
+      }
+
+      .form-wrapper {
+        width: 100%;
+        max-width: 650px;
+        padding-bottom: 2rem;
+      }
+
+      .form-header {
+        margin-bottom: 2rem;
+        border-bottom: 1px solid var(--light-gray);
+        padding-bottom: 1rem;
+      }
+
+      .form-header h2 {
+        font-family: 'Source Serif Pro', serif;
+        color: var(--bgu-dark-blue);
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .form-header p {
+        color: var(--text-muted);
+        font-size: 1rem;
+      }
+
+      /* Grid para campos */
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      }
+
+      .col-span-2 {
+        grid-column: span 2;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        margin-bottom: 0.4rem;
+        font-weight: 500;
+        font-size: 0.9rem;
+        color: var(--text-dark);
+      }
+
+      .required {
+        color: #ef4444;
+        margin-left: 2px;
+      }
+
+      input[type='text'],
+      input[type='email'],
+      input[type='tel'],
+      select,
+      textarea {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 1.5px solid var(--border-color);
+        border-radius: 8px;
+        font-family: 'Roboto', sans-serif;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: var(--white);
+        color: var(--text-dark);
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--bgu-primary-blue);
+        box-shadow: 0 0 0 4px rgba(20, 50, 147, 0.1);
+        background-color: var(--white);
+      }
+
+      /* Estilos para selects personalizados (copiado de Convenios BGU) */
+      .custom-select {
+        position: relative;
+        width: 100%;
+      }
+
+      .custom-select-trigger {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 1.5px solid var(--border-color);
+        border-radius: 8px;
+        font-family: 'Roboto', sans-serif;
+        font-size: 1rem;
+        background-color: var(--white);
+        color: var(--text-dark);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+      }
+
+      .custom-select-trigger:hover {
+        border-color: #9ca3af;
+      }
+
+      .custom-select-trigger:focus {
+        outline: none;
+        border-color: var(--bgu-primary-blue);
+        box-shadow: 0 0 0 4px rgba(20, 50, 147, 0.1);
+      }
+
+      .custom-select-trigger.disabled {
+        background-color: var(--light-gray);
+        cursor: not-allowed;
+        color: var(--text-muted);
+        border-color: #e5e7eb;
+      }
+
+      .custom-select-trigger .arrow {
+        width: 1.2em;
+        height: 1.2em;
+        transition: transform 0.3s ease;
+        color: var(--bgu-primary-blue);
+      }
+
+      .custom-select-trigger.open .arrow {
+        transform: rotate(180deg);
+      }
+
+      .custom-select-options {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        border: 1.5px solid var(--border-color);
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 1000;
+        display: none;
+        animation: slideDown 0.3s ease;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .custom-select-option {
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        border-bottom: 1px solid #f3f4f6;
+      }
+
+      .custom-select-option:last-child {
+        border-bottom: none;
+      }
+
+      .custom-select-option:hover {
+        background-color: rgba(20, 50, 147, 0.05);
+      }
+
+      .custom-select-option.selected {
+        background-color: rgba(20, 50, 147, 0.1);
+        color: var(--bgu-primary-blue);
+        font-weight: 500;
+      }
+
+      /* Ajuste intl-tel-input */
+      .iti {
+        width: 100%;
+      }
+      .iti__country-list {
+        font-family: 'Roboto', sans-serif;
+        border-radius: 8px;
+        border: 1.5px solid var(--border-color);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-submit {
+        width: 100%;
+        background-color: var(--bgu-primary-blue);
+        color: var(--white);
+        padding: 1.1rem;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+        box-shadow: 0 4px 6px rgba(20, 50, 147, 0.2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn-submit:hover {
+        background-color: var(--bgu-dark-blue);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(3, 13, 48, 0.25);
+      }
+
+      /* Personalización SweetAlert2 */
+      .swal2-popup {
+        font-family: 'Roboto', sans-serif !important;
+        background: var(--white) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+        border: 2px solid var(--bgu-primary-blue) !important;
+      }
+
+      .swal2-title {
+        font-family: 'Source Serif Pro', serif !important;
+        color: var(--bgu-dark-blue) !important;
+        font-size: 1.8rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 1rem !important;
+      }
+
+      .swal2-html-container {
+        color: var(--text-dark) !important;
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+        margin: 1rem 0 !important;
+      }
+
+      .swal2-confirm {
+        background-color: var(--bgu-primary-blue) !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 0.75rem 2rem !important;
+        font-family: 'Roboto', sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+        transition: background-color 0.3s ease !important;
+      }
+
+      .swal2-confirm:hover {
+        background-color: var(--bgu-dark-blue) !important;
+      }
+
+      .swal2-icon-success .swal2-success-ring {
+        border-color: var(--bgu-primary-blue) !important;
+      }
+
+      .swal2-icon-success .swal2-success-fix {
+        background-color: var(--white) !important;
+        color: var(--bgu-primary-blue) !important;
+      }
+
+      .swal2-icon-success .swal2-success-circular-line-left,
+      .swal2-icon-success .swal2-success-circular-line-right {
+        border-color: var(--bgu-primary-blue) !important;
+      }
+
+      .footer-note {
+        margin-top: 1.5rem;
+        text-align: center;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 900px) {
+        .main-container {
+          flex-direction: column;
+          height: auto;
+        }
+
+        .image-panel {
+          width: 100%;
+          padding: 3rem 2rem;
+          min-height: 300px;
+        }
+
+        .image-panel h1 {
+          font-size: 2.5rem;
+        }
+
+        .form-panel {
+          width: 100%;
+          padding: 2rem 1.5rem;
+          height: auto; /* deja de ser scroll independiente */
+          overflow-y: visible;
+        }
+
+        .form-grid {
+          grid-template-columns: 1fr;
+          gap: 1.25rem;
+        }
+
+        .col-span-2 {
+          grid-column: span 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-container">
+      <!-- Panel Izquierdo: Branding e Inspiración -->
+      <div class="image-panel">
+        <div class="brand-logo">
+          <img src="logo_bgu_1x.png" alt="Blackwell Global University logo" />
+        </div>
+        <h1>American Experience 2026</h1>
+        <p>
+          Únete al evento de lanzamiento y descubre cómo potenciar tu perfil
+          profesional con una experiencia internacional única.
+        </p>
+      </div>
+
+      <!-- Panel Derecho: Formulario -->
+      <div class="form-panel">
+        <div class="form-wrapper">
+          <div class="form-header">
+            <h2>Registro de Asistencia</h2>
+            <p>Completa tus datos para confirmar tu participación.</p>
+          </div>
+
+          <form id="aeForm" novalidate>
+            <div class="form-grid">
+              <!-- Fila 1: Nombre (ancho completo en desktop si es muy largo, o compartido) -->
+              <div class="form-group col-span-2">
+                <label for="nombre"
+                  >Nombres y Apellidos completos<span class="required"
+                    >*</span
+                  ></label
+                >
+                <input
+                  type="text"
+                  id="nombre"
+                  name="nombre"
+                  placeholder="Ej. Juan Pérez"
+                  required
+                />
+              </div>
+
+              <!-- Fila 2: Correo y Ciudad -->
+              <div class="form-group">
+                <label for="correo"
+                  >Correo electrónico<span class="required">*</span></label
+                >
+                <input
+                  type="email"
+                  id="correo"
+                  name="correo"
+                  placeholder="nombre@correo.com"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="ciudad"
+                  >Ciudad y País de residencia<span class="required"
+                    >*</span
+                  ></label
+                >
+                <input
+                  type="text"
+                  id="ciudad"
+                  name="ciudad"
+                  placeholder="Ej. Lima, Perú"
+                  required
+                />
+              </div>
+
+              <!-- Fila 3: Teléfonos -->
+              <div class="form-group">
+                <label for="telefono"
+                  >Teléfono móvil<span class="required">*</span></label
+                >
+                <input type="tel" id="telefono" name="telefono" required />
+              </div>
+
+              <div class="form-group">
+                <label for="whatsapp">WhatsApp (Opcional)</label>
+                <input type="tel" id="whatsapp" name="whatsapp" />
+              </div>
+
+              <!-- Fila 4: Visa (ancho completo para dar importancia) -->
+              <div class="form-group col-span-2">
+                <label
+                  >¿Cuentas con VISA de turista vigente para Estados
+                  Unidos?<span class="required">*</span></label
+                >
+                <div class="custom-select">
+                  <div class="custom-select-trigger" data-select="visa">
+                    <span class="selected-text">Seleccione una opción...</span>
+                    <svg
+                      class="arrow"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                  <div class="custom-select-options">
+                    <div class="custom-select-option" data-value="Si">
+                      Sí, tengo visa vigente
+                    </div>
+                    <div class="custom-select-option" data-value="No">
+                      No tengo visa
+                    </div>
+                    <div class="custom-select-option" data-value="Tramite">
+                      Está en trámite / Renovación
+                    </div>
+                  </div>
+                  <select id="visa" name="visa" required style="display: none">
+                    <option value="" disabled selected>
+                      Seleccione una opción...
+                    </option>
+                    <option value="Si">Sí, tengo visa vigente</option>
+                    <option value="No">No tengo visa</option>
+                    <option value="Tramite">
+                      Está en trámite / Renovación
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Fila 5: Pregunta (TextArea) -->
+              <div class="form-group col-span-2">
+                <label for="pregunta"
+                  >¿Tienes alguna pregunta específica para el evento?</label
+                >
+                <textarea
+                  id="pregunta"
+                  name="pregunta"
+                  rows="3"
+                  placeholder="Escribe tu consulta aquí..."
+                ></textarea>
+              </div>
+
+              <!-- Fila 6: Origen -->
+              <div class="form-group col-span-2">
+                <label for="como"
+                  >¿Cómo te enteraste del evento?<span class="required"
+                    >*</span
+                  ></label
+                >
+                <div class="custom-select">
+                  <div class="custom-select-trigger" data-select="como">
+                    <span class="selected-text">Seleccione...</span>
+                    <svg
+                      class="arrow"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                  <div class="custom-select-options">
+                    <div
+                      class="custom-select-option"
+                      data-value="Redes sociales"
+                    >
+                      Redes sociales (Instagram, LinkedIn, etc.)
+                    </div>
+                    <div
+                      class="custom-select-option"
+                      data-value="Recomendacion"
+                    >
+                      Recomendación de un amigo/colega
+                    </div>
+                    <div
+                      class="custom-select-option"
+                      data-value="Correo institucional"
+                    >
+                      Correo institucional
+                    </div>
+                    <div class="custom-select-option" data-value="WhatsApp">
+                      Mensaje de WhatsApp
+                    </div>
+                    <div class="custom-select-option" data-value="Otro">
+                      Otro medio
+                    </div>
+                  </div>
+                  <select id="como" name="como" required style="display: none">
+                    <option value="" disabled selected>Seleccione...</option>
+                    <option value="Redes sociales">
+                      Redes sociales (Instagram, LinkedIn, etc.)
+                    </option>
+                    <option value="Recomendacion">
+                      Recomendación de un amigo/colega
+                    </option>
+                    <option value="Correo institucional">
+                      Correo institucional
+                    </option>
+                    <option value="WhatsApp">Mensaje de WhatsApp</option>
+                    <option value="Otro">Otro medio</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <!-- fin grid -->
+
+            <button type="submit" class="btn-submit">
+              Confirmar mi registro <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+            <p class="footer-note">
+              Sus datos serán tratados de acuerdo a nuestra política de
+              privacidad.
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const commonItiOptions = {
+        initialCountry: 'auto',
+        geoIpLookup: function (callback) {
+          fetch('https://geolocation-db.com/json/')
+            .then((resp) => resp.json())
+            .then((data) => {
+              const code = (data.country_code || '').toLowerCase()
+              callback(code || 'pe')
+            })
+            .catch(() => callback('pe'))
+        },
+        preferredCountries: ['pe', 'co', 'mx', 'ec', 'cl'],
+        utilsScript:
+          'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/19.2.16/js/utils.js',
+        separateDialCode: true,
+      }
+
+      const telInput = document.getElementById('telefono')
+      const telIti = window.intlTelInput(telInput, commonItiOptions)
+
+      const waInput = document.getElementById('whatsapp')
+      const waIti = window.intlTelInput(waInput, commonItiOptions)
+
+      // Función para inicializar select personalizado
+      function initCustomSelect(trigger) {
+        const optionsContainer = trigger.nextElementSibling
+        const hiddenSelect = optionsContainer.nextElementSibling
+        const selectedText = trigger.querySelector('.selected-text')
+
+        trigger.addEventListener('click', function (e) {
+          e.stopPropagation()
+          document.querySelectorAll('.custom-select-options').forEach((opt) => {
+            if (opt !== optionsContainer) opt.style.display = 'none'
+          })
+          document
+            .querySelectorAll('.custom-select-trigger')
+            .forEach((trig) => trig.classList.remove('open'))
+
+          if (this.classList.contains('disabled')) return
+
+          const isOpen = optionsContainer.style.display === 'block'
+          optionsContainer.style.display = isOpen ? 'none' : 'block'
+          this.classList.toggle('open', !isOpen)
+        })
+
+        optionsContainer.addEventListener('click', function (e) {
+          if (e.target.classList.contains('custom-select-option')) {
+            const value = e.target.dataset.value
+            const text = e.target.textContent
+            selectedText.textContent = text
+            hiddenSelect.value = value
+            optionsContainer
+              .querySelectorAll('.custom-select-option')
+              .forEach((opt) => opt.classList.remove('selected'))
+            e.target.classList.add('selected')
+            optionsContainer.style.display = 'none'
+            trigger.classList.remove('open')
+            hiddenSelect.dispatchEvent(new Event('change'))
+          }
+        })
+      }
+
+      document
+        .querySelectorAll('.custom-select-trigger')
+        .forEach(initCustomSelect)
+
+      document.addEventListener('click', function () {
+        document.querySelectorAll('.custom-select-options').forEach((opt) => {
+          opt.style.display = 'none'
+        })
+        document.querySelectorAll('.custom-select-trigger').forEach((trig) => {
+          trig.classList.remove('open')
+        })
+      })
+
+      // Manejo del formulario
+      const form = document.getElementById('aeForm')
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault()
+
+        // 1. Validaciones básicas HTML5
+        if (!form.checkValidity()) {
+          form.reportValidity() // Muestra los globos nativos
+          Swal.fire({
+            icon: 'warning',
+            title: 'Campos incompletos',
+            text: 'Por favor completa todos los campos obligatorios.',
+            confirmButtonColor: '#143293',
+            confirmButtonText: 'Entendido',
+            customClass: {
+              popup: 'swal2-popup',
+              title: 'swal2-title',
+              htmlContainer: 'swal2-html-container',
+              confirmButton: 'swal2-confirm',
+            },
+          })
+          return
+        }
+
+        // 2. Validación específica de teléfono principal
+        if (!telIti.isValidNumber()) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Teléfono inválido',
+            text: 'El número de teléfono móvil ingresado no parece válido.',
+            confirmButtonColor: '#143293',
+            confirmButtonText: 'Entendido',
+            customClass: {
+              popup: 'swal2-popup',
+              title: 'swal2-title',
+              htmlContainer: 'swal2-html-container',
+              confirmButton: 'swal2-confirm',
+            },
+          })
+          return
+        }
+
+        // 3. Validación de WhatsApp si se ingresó algo
+        if (waInput.value.trim() !== '' && !waIti.isValidNumber()) {
+          Swal.fire({
+            icon: 'error',
+            title: 'WhatsApp inválido',
+            text: 'El número de WhatsApp ingresado no es válido.',
+            confirmButtonColor: '#143293',
+          })
+          return
+        }
+
+        // Mostrar loading
+        Swal.fire({
+          title: 'Enviando registro...',
+          text: 'Por favor espere un momento.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading()
+          },
+        })
+
+        // Recopilación de datos
+        const data = {
+          nombre: document.getElementById('nombre').value.trim(),
+          ciudad: document.getElementById('ciudad').value.trim(),
+          correo: document.getElementById('correo').value.trim(),
+          telefono: telIti.getNumber(),
+          whatsapp: waInput.value.trim() ? waIti.getNumber() : '',
+          visa: document.getElementById('visa').value,
+          pregunta: document.getElementById('pregunta').value.trim(),
+          como: document.getElementById('como').value,
+          fecha: new Date().toISOString(),
+        }
+
+        // Enviar a Google Apps Script
+        const scriptURL =
+          'https://script.google.com/macros/s/AKfycbxFEYK8BGaDunN_GGXU9erkgruGrwIaVw42gpIynNgRcxQBb-B2qr6VCm4ou02lH5ud/exec'
+
+        const params = new URLSearchParams(data)
+
+        fetch(scriptURL, {
+          method: 'POST',
+          body: params,
+        })
+          .then((response) => response.json())
+          .then((resp) => {
+            if (resp.success) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Registro Completado',
+                text: 'Gracias por tu interés. Hemos recibido tu inscripción y te hemos enviado un correo de confirmación. Nuestro equipo se comunicará contigo pronto.',
+                confirmButtonColor: '#143293',
+                confirmButtonText: 'Entendido',
+                customClass: {
+                  popup: 'swal2-popup',
+                  title: 'swal2-title',
+                  htmlContainer: 'swal2-html-container',
+                  confirmButton: 'swal2-confirm',
+                },
+              }).then(() => {
+                form.reset()
+              })
+            } else {
+              throw new Error(resp.message || 'Error en el servidor')
+            }
+          })
+          .catch((error) => {
+            console.error('Error!', error)
+            Swal.fire({
+              icon: 'error',
+              title: 'Algo salió mal',
+              text: 'No pudimos procesar tu registro. Por favor intenta nuevamente o contáctanos.',
+              confirmButtonColor: '#143293',
+              confirmButtonText: 'Entendido',
+              customClass: {
+                popup: 'swal2-popup',
+                title: 'swal2-title',
+                htmlContainer: 'swal2-html-container',
+                confirmButton: 'swal2-confirm',
+              },
+            })
+          })
+      })
+    </script>
+  </body>
+</html>
