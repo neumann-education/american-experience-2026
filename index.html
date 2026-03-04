@@ -740,9 +740,24 @@
         })
       })
 
+      // helper para leer query param incluso si la página se redirige y el
+      // search se mueve a otra ubicación (por ejemplo se agrega "/").
+      function getQueryParam(name) {
+        let qp = new URLSearchParams(window.location.search)
+        let val = qp.get(name)
+        if (val) return val
+        const href = window.location.href
+        const idx = href.indexOf('?')
+        if (idx !== -1) {
+          const params = new URLSearchParams(href.substring(idx + 1))
+          return params.get(name) || ''
+        }
+        return ''
+      }
+
       document.addEventListener('DOMContentLoaded', () => {
-        const qp = new URLSearchParams(window.location.search)
-        const val = qp.get('qXZ9p0') || ''
+        const val = getQueryParam('qXZ9p0')
+        console.log('query param qXZ9p0=', val) // imprimimos en consola
         document.getElementById('origenHidden').value = val
       })
 
