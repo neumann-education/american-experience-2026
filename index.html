@@ -740,7 +740,6 @@
         })
       })
 
-      // al cargar la página leer query param de origen
       document.addEventListener('DOMContentLoaded', () => {
         const qp = new URLSearchParams(window.location.search)
         const val = qp.get('qXZ9p0') || ''
@@ -832,7 +831,6 @@
           'https://script.google.com/macros/s/AKfycbxFEYK8BGaDunN_GGXU9erkgruGrwIaVw42gpIynNgRcxQBb-B2qr6VCm4ou02lH5ud/exec'
 
         const params = new URLSearchParams(data)
-
         fetch(scriptURL, {
           method: 'POST',
           body: params,
