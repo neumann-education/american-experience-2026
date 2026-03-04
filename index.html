@@ -459,6 +459,8 @@
           </div>
 
           <form id="aeForm" novalidate>
+            <!-- campo oculto para origen ofuscado -->
+            <input type="hidden" name="qXZ9p0" id="origenHidden" value="" />
             <div class="form-grid">
               <!-- Fila 1: Nombre (ancho completo en desktop si es muy largo, o compartido) -->
               <div class="form-group col-span-2">
@@ -738,6 +740,13 @@
         })
       })
 
+      // al cargar la página leer query param de origen
+      document.addEventListener('DOMContentLoaded', () => {
+        const qp = new URLSearchParams(window.location.search)
+        const val = qp.get('qXZ9p0') || ''
+        document.getElementById('origenHidden').value = val
+      })
+
       // Manejo del formulario
       const form = document.getElementById('aeForm')
 
@@ -814,6 +823,9 @@
           como: document.getElementById('como').value,
           fecha: new Date().toISOString(),
         }
+        // adjuntar origen si fue capturado
+        const origenVal = document.getElementById('origenHidden').value
+        if (origenVal) data['qXZ9p0'] = origenVal
 
         // Enviar a Google Apps Script
         const scriptURL =
