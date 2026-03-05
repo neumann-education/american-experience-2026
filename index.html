@@ -412,6 +412,8 @@
           width: 100%;
           padding: 3rem 2rem;
           min-height: 300px;
+          /* empujar texto debajo del logo */
+          padding-top: 4rem;
         }
 
         .image-panel h1 {
@@ -423,6 +425,22 @@
           padding: 2rem 1.5rem;
           height: auto; /* deja de ser scroll independiente */
           overflow-y: visible;
+        }
+
+        /* mantener anchura estándar del formulario */
+        .form-wrapper {
+          width: 100%;
+        }
+
+        /* logo responsive */
+        .brand-logo img {
+          max-width: 120px;
+        }
+        .brand-logo {
+          position: relative;
+          top: auto;
+          left: auto;
+          margin-bottom: 1rem;
         }
 
         .form-grid {
@@ -654,11 +672,6 @@
             <button type="submit" class="btn-submit">
               Confirmar mi registro <i class="fa-solid fa-arrow-right"></i>
             </button>
-
-            <p class="footer-note">
-              Sus datos serán tratados de acuerdo a nuestra política de
-              privacidad.
-            </p>
           </form>
         </div>
       </div>
